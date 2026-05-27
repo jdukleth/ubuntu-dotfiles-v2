@@ -8,7 +8,7 @@ Bash customizations for Ubuntu / WSL — modular prompt, aliases, and functions.
 .config/bash/
 ├── .prompt     # multi-line PS1 with git branch and exit status
 ├── .aliases    # reload, cd shortcuts
-└── .functions  # sw(), jds()
+└── .functions  # sw()
 ```
 
 ## Install

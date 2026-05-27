@@ -2,13 +2,3 @@
 sw() {
     cd "/srv/www/$1"
 }
-
-# jds — v3 developer tools
-export PATH="/srv/www/v3-experiment:$PATH"
-
-jds() {
-    command "/srv/www/v3-experiment/jds" "$@"
-    local _jds_status=$?
-    [[ -f "$HOME/.bashrc" ]] && source "$HOME/.bashrc"
-    return $_jds_status
-}
