@@ -1,0 +1,10 @@
+# reload bash configuration
+alias reload='source ~/.bashrc'
+
+# directory navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'

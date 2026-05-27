@@ -1,0 +1,43 @@
+# Multi-line prompt: info on line 1, cursor on line 2
+__prompt_reset='\[\033[0m\]'
+__prompt_bold='\[\033[1m\]'
+__prompt_fg_user='\[\033[38;5;115m\]'     # soft green
+__prompt_fg_path='\[\033[38;5;117m\]'     # soft blue
+__prompt_fg_branch='\[\033[38;5;176m\]'  # soft magenta
+__prompt_fg_dim='\[\033[38;5;245m\]'     # gray
+__prompt_fg_accent='\[\033[38;5;86m\]'   # bright cyan
+__prompt_fg_err='\[\033[38;5;203m\]'      # soft red
+
+__prompt_last_status=0
+
+__prompt_build() {
+    local branch branch_info="" err_info="" title=""
+
+    branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
+    if [[ -n "$branch" ]]; then
+        local dirty=""
+        [[ -n "$(git status --porcelain 2>/dev/null)" ]] && dirty="*"
+        branch_info="${__prompt_fg_dim} · ${__prompt_reset}${__prompt_fg_branch}${branch}${dirty}${__prompt_reset}"
+    fi
+
+    if (( __prompt_last_status != 0 )); then
+        err_info=" ${__prompt_fg_err}${__prompt_bold}✘ ${__prompt_last_status}${__prompt_reset}"
+    fi
+
+    case "$TERM" in
+    xterm*|rxvt*)
+        title="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]"
+        ;;
+    esac
+
+    PS1="${title}${__prompt_fg_user}\u${__prompt_reset}${__prompt_fg_dim} · ${__prompt_reset}${__prompt_fg_path}\w${__prompt_reset}${branch_info}${err_info}\n  ${__prompt_fg_accent}${__prompt_bold}▸${__prompt_reset} "
+}
+
+__prompt_hook() {
+    __prompt_last_status=$?
+    __prompt_build
+}
+
+PROMPT_COMMAND="__prompt_hook"
+unset color_prompt force_color_prompt
+__prompt_build
